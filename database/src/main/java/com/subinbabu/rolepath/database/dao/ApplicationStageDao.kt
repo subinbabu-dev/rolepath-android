@@ -30,4 +30,41 @@ interface ApplicationStageDao {
     suspend fun insertStage(
         stage: ApplicationStageEntity,
     )
+
+    /** Updates editable stage fields without changing parent application or position. */
+    @Query(
+        """
+    UPDATE application_stages
+    SET title = :title,
+        type = :type,
+        status = :status,
+        outcome = :outcome,
+        scheduledAtEpochMillis = :scheduledAtEpochMillis,
+        scheduledZoneId = :scheduledZoneId,
+        reminderOffsetMinutes = :reminderOffsetMinutes,
+        meetingLink = :meetingLink,
+        preparationNotes = :preparationNotes,
+        updatedAtEpochMillis = :updatedAtEpochMillis
+    WHERE id = :stageId
+    """
+    )
+    suspend fun updateStageDetails(
+        stageId: String,
+        title: String,
+        type: String,
+        status: String,
+        outcome: String,
+        scheduledAtEpochMillis: Long?,
+        scheduledZoneId: String?,
+        reminderOffsetMinutes: Long?,
+        meetingLink: String?,
+        preparationNotes: String?,
+        updatedAtEpochMillis: Long,
+    ): Int
+
+    /** Deletes a stage row. Parent timestamp and reminder cancellation are coordinated by the repository. */
+    @Query("DELETE FROM application_stages WHERE id = :stageId")
+    suspend fun deleteStage(
+        stageId: String,
+    ): Int
 }

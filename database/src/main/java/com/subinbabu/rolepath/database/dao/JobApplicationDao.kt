@@ -90,4 +90,17 @@ interface JobApplicationDao {
     suspend fun deleteApplication(
         applicationId: String,
     ): Int
+
+    /** Updates the parent application's modified timestamp after child-stage changes. */
+    @Query(
+        """
+    UPDATE job_applications
+    SET updatedAtEpochMillis = :updatedAtEpochMillis
+    WHERE id = :applicationId
+    """
+    )
+    suspend fun touchApplication(
+        applicationId: String,
+        updatedAtEpochMillis: Long,
+    ): Int
 }
