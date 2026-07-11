@@ -67,4 +67,19 @@ interface ApplicationStageDao {
     suspend fun deleteStage(
         stageId: String,
     ): Int
+
+    /** Updates a stage position during pipeline reordering. */
+    @Query(
+        """
+    UPDATE application_stages
+    SET position = :position,
+        updatedAtEpochMillis = :updatedAtEpochMillis
+    WHERE id = :stageId
+    """
+    )
+    suspend fun updateStagePosition(
+        stageId: String,
+        position: Int,
+        updatedAtEpochMillis: Long,
+    ): Int
 }
