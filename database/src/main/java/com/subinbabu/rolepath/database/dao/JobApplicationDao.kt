@@ -103,4 +103,45 @@ interface JobApplicationDao {
         applicationId: String,
         updatedAtEpochMillis: Long,
     ): Int
+
+    /** Updates editable application fields without changing status or archive state. */
+    @Query(
+        """
+    UPDATE job_applications
+    SET companyName = :companyName,
+        jobTitle = :jobTitle,
+        dateAppliedEpochDay = :dateAppliedEpochDay,
+        location = :location,
+        workMode = :workMode,
+        jobUrl = :jobUrl,
+        applicationSource = :applicationSource,
+        recruiterName = :recruiterName,
+        recruiterEmail = :recruiterEmail,
+        compensationText = :compensationText,
+        followUpEpochMillis = :followUpEpochMillis,
+        followUpZoneId = :followUpZoneId,
+        followUpReminderOffsetMinutes = :followUpReminderOffsetMinutes,
+        notes = :notes,
+        updatedAtEpochMillis = :updatedAtEpochMillis
+    WHERE id = :applicationId
+    """
+    )
+    suspend fun updateApplicationDetails(
+        applicationId: String,
+        companyName: String,
+        jobTitle: String,
+        dateAppliedEpochDay: Long?,
+        location: String?,
+        workMode: String,
+        jobUrl: String?,
+        applicationSource: String?,
+        recruiterName: String?,
+        recruiterEmail: String?,
+        compensationText: String?,
+        followUpEpochMillis: Long?,
+        followUpZoneId: String?,
+        followUpReminderOffsetMinutes: Long?,
+        notes: String?,
+        updatedAtEpochMillis: Long,
+    ): Int
 }
